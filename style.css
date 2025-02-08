@@ -1,0 +1,195 @@
+/* General Styles */
+body {
+  font-family: "Marker Felt", cursive; /* Cursive jazz font */
+  background: linear-gradient(135deg, #00bfae, #004d3d); /* Teal gradient background */
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  color: white;
+  box-sizing: border-box;
+}
+
+/* Header Styles */
+header {
+  display: flex;
+  justify-content: flex-start; /* Align the header text to the left */
+  align-items: center; /* Center items vertically */
+  width: 100%;
+  padding: 2vh 4vw; /* Responsive padding */
+  position: fixed; /* Fix header to the top */
+  top: 0;
+  left: 0;
+  z-index: 1000; /* Ensure the header stays on top  */
+}
+
+/* Title Styles */
+header h1 {
+  font-family: "Pacifico", cursive;
+  color: orangered; /* Orange-reddish color */
+  font-size: 2.5vw; /* Adjusted smaller font size for header */
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Light shadow for a subtle effect */
+}
+
+/* About Link Styles */
+.about-link {
+  color: black;
+  font-family: "Comic Sans MS", sans-serif; /* jjjazzy sans font */
+  font-size: 2vw; 
+  text-decoration: none;
+  transition: color 0.3s ease, transform 0.3s ease, text-decoration 0.3s ease;
+  position: absolute; 
+  top: 3vh; /* Adjust the top position */
+  left: 86%; /* Position about 4/5 from the left */
+  transform: translateX(-75%); 
+}
+
+.about-link:hover {
+  color: #f0a500; /* Hover effect color */
+  transform: scale(1.1) translateX(-75%); /* Slight zoom effect on hover */
+  text-decoration: underline; /* Underline the link on hover */
+}
+
+/* Drum Kit Selector */
+.drum-kit-selector {
+  position: absolute;
+  bottom: 5vh;
+  left: 4vw;
+  font-family: "Sacramento", cursive; 
+  color: white;
+}
+
+.drum-kit-selector label {
+  font-size: 1.5vw;
+  font-family: "Comic Sans MS", cursive;
+  margin-right: 1vw;
+}
+
+#drumKit {
+  font-size: 1.5vw;
+  font-family: "Lucida Sans", sans-serif; 
+  padding: 1vh;
+  background-color: rgba(255, 255, 255, 0.7); /* Transparent background */
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  color: #004d3d; 
+}
+
+/* Keyboard Styles */
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 3vh; 
+}
+
+.keyboard-row {
+  display: flex;
+  margin: 0; /* Remove extra margin */
+}
+
+.key {
+  width: 6vw; 
+  height: 6vw; 
+  margin: 0.5vw; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #5aaf8d, #81d4fa); /* Lighter blue gradient */
+  background-image: url('data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 4 4"%3E%3Cg fill="%23004d3d" fill-opacity="0.1"%3E%3Cpath d="M0 4L4 0H0z"/%3E%3Cpath d="M4 4V0H0z"/%3E%3C/g%3E%3C/svg%3E'); /* Subtle texture */
+  background-blend-mode: overlay;
+  border: 3px solid #d4e157; /* Light lemon green border */
+  border-radius: 8px;
+  font-size: 1.5vw;
+  text-align: center;
+  color: white;
+  font-family: "Rock Salt", cursive; 
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2); 
+  transition: transform 0.1s ease-out, background-color 0.2s ease;
+}
+
+.key.active {
+  background-color: #ffff99; 
+  color: black; 
+  transform: scale(1.05); 
+}
+
+.key:active {
+  transform: scale(0.95); 
+}
+
+/* Spacebar Styles */
+.spacebar {
+  width: 35vw;
+}
+
+/* Footer and additional elements */
+footer {
+  font-family: "Comic Sans MS", cursive; /* Playful font */
+  font-size: 1.5vw;
+  color: white;
+  margin-top: 20px;
+}
+
+/* Highlight effects */
+.key.active {
+  animation: keyHighlight 0.1s ease-in-out;
+}
+
+@keyframes keyHighlight {
+  0% {
+      transform: scale(1);
+  }
+  50% {
+      transform: scale(1.1);
+  }
+  100% {
+      transform: scale(1);
+  }
+}
+
+/* Media Queries */
+@media (max-width: 800px) {
+  header h1 {
+      font-size: 5vw;
+  }
+
+  .about-link {
+      font-size: 4vw; 
+  }
+
+  .key {
+      width: 9vw; 
+      height: 9vw;
+      font-size: 3vw; 
+  }
+
+  .spacebar {
+      width: 50vw; 
+  }
+}
+
+@media (max-width: 500px) {
+  header h1 {
+      font-size: 7vw; 
+  }
+
+  .about-link {
+      font-size: 5vw; 
+  }
+
+  .key {
+      width: 12vw; 
+      height: 12vw;
+      font-size: 4vw; 
+  }
+
+  .spacebar {
+      width: 50vw; 
+  }
+}
