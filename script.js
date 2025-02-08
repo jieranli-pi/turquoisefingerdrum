@@ -92,11 +92,13 @@ keyboardLayout.forEach((row) => {
         rowDiv.appendChild(keyDiv);
 
         // Add click and touch event listeners
-        keyDiv.addEventListener("click", () => handleInteraction(key));
+        keyDiv.addEventListener("mousedown", () => handleInteraction(key));
+        keyDiv.addEventListener("mouseup", () => releaseInteraction(key));
         keyDiv.addEventListener("touchstart", (e) => {
             e.preventDefault(); // Prevent default touch behavior
             handleInteraction(key);
         });
+        keyDiv.addEventListener("touchend", () => releaseInteraction(key));
     });
 
     keyboardDiv.appendChild(rowDiv);
@@ -157,6 +159,14 @@ function handleInteraction(key) {
     }
 }
 
+// Function to release interaction (click or touch)
+function releaseInteraction(key) {
+    if (activeKeys.has(key)) {
+        activeKeys.delete(key);
+        stopSound(key); // Stop the sound when the key is released
+    }
+}
+
 // Add event listener for keydown to play sounds
 document.addEventListener("keydown", (event) => {
     const key = event.key.toUpperCase();
@@ -166,10 +176,7 @@ document.addEventListener("keydown", (event) => {
 // Add event listener for keyup to release keys and stop sound
 document.addEventListener("keyup", (event) => {
     const key = event.key.toUpperCase();
-    if (activeKeys.has(key)) {
-        activeKeys.delete(key);
-        stopSound(key); // Stop the sound when the key is released
-    }
+    releaseInteraction(key);
 });
 
 // Highlight the pressed key visually
