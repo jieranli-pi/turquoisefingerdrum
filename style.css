@@ -204,6 +204,7 @@ header h1 {
 /* Spacebar Styles */
 .spacebar {
   width: 35vw;
+  margin-left: 15vw; /* Move the space bar 2 blocks (12vw) to the right */
 }
 
 /* Footer and additional elements */
@@ -249,6 +250,7 @@ footer {
 
   .spacebar {
       width: 50vw; 
+      margin-left: 18vw; /* Adjust for smaller screens */
   }
 }
 
@@ -269,5 +271,6 @@ footer {
 
   .spacebar {
       width: 50vw; 
+      margin-left: 24vw; /* Adjust for smaller screens */
   }
 }

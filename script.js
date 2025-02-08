@@ -90,6 +90,10 @@ keyboardLayout.forEach((row) => {
 
         keyDiv.appendChild(volumeSlider);
         rowDiv.appendChild(keyDiv);
+
+        // Add click and touch event listeners
+        keyDiv.addEventListener("click", () => handleInteraction(key));
+        keyDiv.addEventListener("touchstart", () => handleInteraction(key));
     });
 
     keyboardDiv.appendChild(rowDiv);
@@ -133,11 +137,8 @@ function stopSound(key) {
     }
 }
 
-// Add event listener for keydown to play sounds
-document.addEventListener("keydown", (event) => {
-    const key = event.key.toUpperCase();
-
-    // Ensure the key is part of the layout and not already pressed
+// Function to handle interaction (click or touch)
+function handleInteraction(key) {
     if (keyboardLayout.join("").includes(key) && !activeKeys.has(key)) {
         activeKeys.add(key);
 
@@ -151,6 +152,12 @@ document.addEventListener("keydown", (event) => {
         playSound(key); // Play the sound when the key is pressed
         highlightKey(key);
     }
+}
+
+// Add event listener for keydown to play sounds
+document.addEventListener("keydown", (event) => {
+    const key = event.key.toUpperCase();
+    handleInteraction(key);
 });
 
 // Add event listener for keyup to release keys and stop sound
