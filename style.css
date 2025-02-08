@@ -29,10 +29,10 @@ header {
 /* Title Styles */
 header h1 {
   font-family: "Pacifico", cursive;
-  color: orangered; /* Orange-reddish color */
+  color: orangered; /* Gold-red color */
   font-size: 2.5vw; /* Adjusted smaller font size for header */
   margin: 0;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4); /* Light shadow for a subtle effect */
+  text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.4); /* Light shadow for a subtle effect */
 }
 
 /* About Link Styles */
@@ -69,14 +69,19 @@ header h1 {
   margin-right: 1vw;
 }
 
-#drumKit {
+.fancy-select {
   font-size: 1.5vw;
-  font-family: "Lucida Sans", sans-serif; 
+  font-family: "Comic Sans MS", sans-serif; 
   padding: 1vh;
-  background-color: rgba(255, 255, 255, 0.7); /* Transparent background */
+  background: linear-gradient(135deg, #739444, #008080); /* Gradient background (teal to blue) */
   border: 1px solid #ccc;
   border-radius: 6px;
-  color: #004d3d; 
+  color: white; /* White text */
+}
+
+.fancy-select:hover {
+  background: linear-gradient(135deg, #00008b, #008080); /* Reversed gradient on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 /* Volume and Mixing Section */
@@ -91,17 +96,20 @@ header h1 {
   margin-top: 10px;
   cursor: pointer;
   font-size: 1.5vw;
-  font-family: "Lucida Sans", sans-serif; 
-  background-color: rgba(255, 255, 255, 0.7); /* Transparent background */
+  font-family: "Comic Sans MS", sans-serif; /* Interesting font */
+  background: linear-gradient(135deg, #739444, #008080); /* Gradient background (teal to blue) */
   border: 1px solid #ccc;
   border-radius: 6px;
-  color: #004d3d; 
+  color: white; /* White text */
   display: inline-block;
   text-align: center;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2); /* Light shadow */
+  transition: transform 0.1s ease-out, background-color 0.2s ease;
 }
 
 .custom-button:hover {
-  background-color: rgba(255, 255, 255, 0.9);
+  background: linear-gradient(135deg, #00008b, #008080); /* Reversed gradient on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 .hidden {
