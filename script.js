@@ -1,7 +1,6 @@
 // Define available drum kits
 const drumKits = {
     classic: "maple", // Subfolder for Classic drum kit
-    rock: "rock", // Subfolder for Rock drum kit
     jazz: "jazz", // Subfolder for Jazz drum kit
     electronic: "electronic", // Subfolder for Electronic drum kit
 };

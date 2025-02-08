@@ -73,7 +73,7 @@ header h1 {
   font-size: 1.5vw;
   font-family: "Comic Sans MS", sans-serif; 
   padding: 1vh;
-  background: linear-gradient(135deg, #739444, #008080); /* Gradient background (teal to blue) */
+  background: linear-gradient(135deg, #739444, #0d805f); /* Gradient background (teal to blue) */
   border: 1px solid #ccc;
   border-radius: 6px;
   color: white; /* White text */
@@ -97,7 +97,7 @@ header h1 {
   cursor: pointer;
   font-size: 1.5vw;
   font-family: "Comic Sans MS", sans-serif; /* Interesting font */
-  background: linear-gradient(135deg, #739444, #008080); /* Gradient background (teal to blue) */
+  background: linear-gradient(135deg, #739444, #0d805f); /* Gradient background (teal to blue) */
   border: 1px solid #ccc;
   border-radius: 6px;
   color: white; /* White text */
