@@ -52,6 +52,7 @@ const preloadSounds = () => {
         const soundFile = keySoundMap[key];
         const audio = new Audio(`sounds/${currentDrumKit}/${soundFile}`); // Load from the selected drum kit's subfolder
         audio.preload = "auto"; // Ensure sound is preloaded immediately
+        audio.volume = 0.6; // Set initial volume to 60%
         sounds[key] = audio;
     });
 };
@@ -78,6 +79,17 @@ keyboardLayout.forEach((row) => {
         keyDiv.className = `key ${key === " " ? "spacebar" : ""}`;
         keyDiv.innerText = key === " " ? "" : key; // Omit text for the spacebar
         keyDiv.setAttribute("data-key", key);
+
+        const volumeSlider = document.createElement("input");
+        volumeSlider.type = "range";
+        volumeSlider.min = 0;
+        volumeSlider.max = 100;
+        volumeSlider.value = 60; // Set initial value to 60%
+        volumeSlider.addEventListener("input", function () {
+            sounds[key].volume = volumeSlider.value / 100;
+        });
+
+        keyDiv.appendChild(volumeSlider);
         rowDiv.appendChild(keyDiv);
     });
 
@@ -89,6 +101,7 @@ function playSound(key) {
     const sound = sounds[key];
     if (sound) {
         const audio = sound.cloneNode(); // Create a new audio instance each time
+        audio.volume = sound.volume; // Set volume to the same as the original sound
         audio.play();
 
         // If the key is open hi-hat (T or Y), store the reference to it
@@ -168,3 +181,30 @@ document.getElementById("drumKit").addEventListener("change", (event) => {
 
 // Preload sounds when the page loads
 window.addEventListener("load", preloadSounds);
+
+// Volume and Mixing Button and Controls
+document.addEventListener('DOMContentLoaded', function () {
+    const volumeMixingBtn = document.getElementById('volumeMixingBtn');
+    const volumeControls = document.getElementById('volumeControls');
+    const keys = Object.keys(keySoundMap);
+
+    volumeMixingBtn.addEventListener('click', function () {
+        const keyElements = document.querySelectorAll('.key');
+        keyElements.forEach(keyElement => {
+            keyElement.classList.toggle('show-volume');
+        });
+
+        if (volumeControls.classList.contains('hidden')) {
+            volumeControls.classList.remove('hidden');
+        } else {
+            volumeControls.classList.add('hidden');
+        }
+    });
+
+    document.getElementById('overallVolume').addEventListener('input', function () {
+        const overallVolume = this.value / 100;
+        keys.forEach(key => {
+            sounds[key].volume = overallVolume;
+        });
+    });
+});

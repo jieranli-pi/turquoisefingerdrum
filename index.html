@@ -23,6 +23,20 @@
     </select>
   </div>
 
+  <!-- Volume and Mixing Button -->
+  <div class="volume-mixing-section">
+    <button id="volumeMixingBtn" class="button">Volume and Mixing</button>
+  </div>
+
+  <!-- Volume Controls -->
+  <div id="volumeControls" class="hidden">
+    <label for="overallVolume">Overall Volume:</label>
+    <input type="range" id="overallVolume" min="0" max="100" value="60">
+    <div id="keysVolumeControls">
+      <!-- Individual key volume controls will be dynamically added here -->
+    </div>
+  </div>
+
   <div id="keyboard" class="keyboard"></div>
   <script src="script.js"></script>
 </body>
