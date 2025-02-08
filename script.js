@@ -207,4 +207,13 @@ document.addEventListener('DOMContentLoaded', function () {
             sounds[key].volume = overallVolume;
         });
     });
+
+    // Ensure custom buttons with 'no-keyboard-trigger' class are not focused when space bar is pressed
+    document.querySelectorAll('.no-keyboard-trigger').forEach(button => {
+        button.addEventListener('keydown', function (event) {
+            if (event.key === ' ') {
+                event.preventDefault();
+            }
+        });
+    });
 });

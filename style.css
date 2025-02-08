@@ -86,7 +86,7 @@ header h1 {
   left: 4vw;
 }
 
-.button {
+.custom-button {
   padding: 10px 20px;
   margin-top: 10px;
   cursor: pointer;
@@ -96,6 +96,12 @@ header h1 {
   border: 1px solid #ccc;
   border-radius: 6px;
   color: #004d3d; 
+  display: inline-block;
+  text-align: center;
+}
+
+.custom-button:hover {
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .hidden {
