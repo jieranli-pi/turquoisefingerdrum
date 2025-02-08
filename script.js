@@ -93,7 +93,10 @@ keyboardLayout.forEach((row) => {
 
         // Add click and touch event listeners
         keyDiv.addEventListener("click", () => handleInteraction(key));
-        keyDiv.addEventListener("touchstart", () => handleInteraction(key));
+        keyDiv.addEventListener("touchstart", (e) => {
+            e.preventDefault(); // Prevent default touch behavior
+            handleInteraction(key);
+        });
     });
 
     keyboardDiv.appendChild(rowDiv);
@@ -174,7 +177,7 @@ function highlightKey(key) {
     const keyDiv = document.querySelector(`.key[data-key="${key}"]`);
     if (keyDiv) {
         keyDiv.classList.add("active");
-        setTimeout(() => keyDiv.classList.remove("active"), 100); // Minimize highlight delay to 1ms
+        setTimeout(() => keyDiv.classList.remove("active"), 100); // Minimize highlight delay to 100ms
     }
 }
 
