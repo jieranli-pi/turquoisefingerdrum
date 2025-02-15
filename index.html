@@ -27,6 +27,13 @@
     <div id="volumeMixingBtn" class="custom-button no-keyboard-trigger fancy-button">Volume and Mixing</div>
   </div>
 
+  <!-- Choose Sample Button -->
+  <div class="choose-sample-section">
+    <label for="chooseSample">Load Sample</label>
+    <div id="chooseSampleBtn" class="custom-button no-keyboard-trigger fancy-button">Choose Sample</div>
+    <input type="file" id="chooseSample" accept=".wav" style="display: none;">
+  </div>
+
   <!-- Volume Controls -->
   <div id="volumeControls" class="hidden">
     <label for="overallVolume">Overall Volume:</label>
@@ -37,6 +44,10 @@
   </div>
 
   <div id="keyboard" class="keyboard"></div>
+
+  <!-- Instruction Message -->
+  <div id="instructionMessage" class="hidden">Press the key you want to assign this new sound to.</div>
+
   <script src="script.js"></script>
 </body>
 </html>

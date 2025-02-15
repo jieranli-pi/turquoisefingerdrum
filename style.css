@@ -1,3 +1,4 @@
+
 /* General Styles */
 body {
   font-family: "Marker Felt", cursive; /* Cursive jazz font */
@@ -273,4 +274,48 @@ footer {
       width: 50vw; 
       margin-left: 24vw; /* Adjust for smaller screens */
   }
+}
+
+/* Rotate page in mobile mode */
+@media only screen and (max-width: 600px) {
+    body {
+        transform: rotate(90deg);
+        transform-origin: left top;
+        width: 100vh; /* 100% of the viewport height */
+        position: absolute;
+        top: 100vw; /* Shift the rotated page down */
+        left: 0;
+    }
+}
+
+/* Choose Sample Button Styles */
+.choose-sample-section {
+  position: absolute;
+  bottom: 5vh;
+  right: 4vw;
+}
+
+.choose-sample-section label {
+  font-size: 1.5vw;
+  font-family: "Comic Sans MS", cursive;
+  margin-right: 1vw;
+}
+
+#instructionMessage {
+  position: fixed;
+  bottom: 10vh;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: "Comic Sans MS", sans-serif;
+  font-size: 1.5vw;
+  text-align: center;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.2);
+}
+
+.hidden {
+  display: none;
 }

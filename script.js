@@ -3,233 +3,308 @@ const drumKits = {
     classic: "maple", // Subfolder for Classic drum kit
     jazz: "jazz", // Subfolder for Jazz drum kit
     electronic: "electronic", // Subfolder for Electronic drum kit
-};
-
-// Current key-to-sound mapping
-const keySoundMap = {
+  };
+  
+  // Current key-to-sound mapping
+  const keySoundMap = {
     " ": "bass_drum.wav", // Spacebar -> Bass Drum
-    "Q": "chimeup.wav",
-    "W": "chimedwn.wav",
-    "E": "crash.wav",
-    "R": "closed_hihat.wav",
-    "T": "open_hihat.wav",
-    "Y": "open_hihat.wav",
-    "U": "closed_hihat.wav",
-    "I": "ride_crash.wav",
-    "O": "jinglebell.wav",
-    "P": "cowbell.wav",
-    "A": "agogo.wav",
-    "S": "cymbal_hard.wav",
-    "D": "cymbal_soft.wav",
-    "F": "snare_rim.wav",
-    "G": "snare_drum.wav",
-    "H": "snare_drum.wav",
-    "J": "snare_rim.wav",
-    "K": "cymbal_soft.wav",
-    "L": "cymbal_hard.wav",
-    "Z": "sticks.wav",
-    "X": "sticks.wav",
-    "C": "tom1.wav",
-    "V": "tom2.wav",
-    "B": "tom3.wav",
-    "N": "tom2.wav",
-    "M": "tom1.wav",
-};
-
-// Track active keys to prevent retriggering sounds
-const activeKeys = new Set();
-
-// Preload sound files and cache them
-const sounds = {};
-let currentDrumKit = "maple"; // Default drum kit
-
-let openHiHatAudio = null; // Store reference to the open hi-hat audio
-
-// Preload sounds function
-const preloadSounds = () => {
+    Q: "chimeup.wav",
+    W: "chimedwn.wav",
+    E: "crash.wav",
+    R: "closed_hihat.wav",
+    T: "open_hihat.wav",
+    Y: "open_hihat.wav",
+    U: "closed_hihat.wav",
+    I: "ride_crash.wav",
+    O: "jinglebell.wav",
+    P: "cowbell.wav",
+    A: "agogo.wav",
+    S: "cymbal_hard.wav",
+    D: "cymbal_soft.wav",
+    F: "snare_rim.wav",
+    G: "snare_drum.wav",
+    H: "snare_drum.wav",
+    J: "snare_rim.wav",
+    K: "cymbal_soft.wav",
+    L: "cymbal_hard.wav",
+    Z: "sticks.wav",
+    X: "sticks.wav",
+    C: "tom1.wav",
+    V: "tom2.wav",
+    B: "tom3.wav",
+    N: "tom2.wav",
+    M: "tom1.wav",
+  };
+  
+  // Track active keys to prevent retriggering sounds
+  const activeKeys = new Set();
+  
+  // Preload sound files and cache them
+  const sounds = {};
+  let currentDrumKit = "maple"; // Default drum kit
+  
+  let openHiHatAudio = null; // Store reference to the open hi-hat audio
+  
+  // Preload sounds function
+  const preloadSounds = () => {
     Object.keys(keySoundMap).forEach((key) => {
-        const soundFile = keySoundMap[key];
-        const audio = new Audio(`sounds/${currentDrumKit}/${soundFile}`); // Load from the selected drum kit's subfolder
-        audio.preload = "auto"; // Ensure sound is preloaded immediately
-        audio.volume = 0.6; // Set initial volume to 60%
-        sounds[key] = audio;
+      const soundFile = keySoundMap[key];
+      const audio = new Audio(`sounds/${currentDrumKit}/${soundFile}`); // Load from the selected drum kit's subfolder
+      audio.preload = "auto"; // Ensure sound is preloaded immediately
+      audio.volume = 0.6; // Set initial volume to 60%
+      sounds[key] = audio;
     });
-};
-
-// Store currently playing sound objects to manage up to 64 sounds
-const playingSounds = [];
-
-// Define keyboard rows
-const keyboardLayout = [
-    "QWERTYUIOP", // Top row
-    "ASDFGHJKL", // Second row
-    "ZXCVBNM", // Third row
-    " ", // Spacebar
-];
-
-// Generate keyboard layout
-const keyboardDiv = document.getElementById("keyboard");
-keyboardLayout.forEach((row) => {
+  };
+  
+  // Store currently playing sound objects to manage up to 64 sounds
+  const playingSounds = [];
+  
+  // Define keyboard rows
+  const keyboardLayout = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM", " "];
+  
+  // Generate keyboard layout
+  const keyboardDiv = document.getElementById("keyboard");
+  keyboardLayout.forEach((row) => {
     const rowDiv = document.createElement("div");
     rowDiv.className = "keyboard-row";
-
+  
     row.split("").forEach((key) => {
-        const keyDiv = document.createElement("div");
-        keyDiv.className = `key ${key === " " ? "spacebar" : ""}`;
-        keyDiv.innerText = key === " " ? "" : key; // Omit text for the spacebar
-        keyDiv.setAttribute("data-key", key);
-
-        const volumeSlider = document.createElement("input");
-        volumeSlider.type = "range";
-        volumeSlider.min = 0;
-        volumeSlider.max = 100;
-        volumeSlider.value = 60; // Set initial value to 60%
-        volumeSlider.addEventListener("input", function () {
-            sounds[key].volume = volumeSlider.value / 100;
-        });
-
-        keyDiv.appendChild(volumeSlider);
-        rowDiv.appendChild(keyDiv);
-
-        // Add click and touch event listeners
-        keyDiv.addEventListener("mousedown", () => handleInteraction(key));
-        keyDiv.addEventListener("mouseup", () => releaseInteraction(key));
-        keyDiv.addEventListener("touchstart", (e) => {
-            e.preventDefault(); // Prevent default touch behavior
-            handleInteraction(key);
-        });
-        keyDiv.addEventListener("touchend", () => releaseInteraction(key));
+      const keyDiv = document.createElement("div");
+      keyDiv.className = `key ${key === " " ? "spacebar" : ""}`;
+      keyDiv.innerText = key === " " ? "" : key; // Omit text for the spacebar
+      keyDiv.setAttribute("data-key", key);
+  
+      const volumeSlider = document.createElement("input");
+      volumeSlider.type = "range";
+      volumeSlider.min = 0;
+      volumeSlider.max = 100;
+      volumeSlider.value = 60; // Set initial value to 60%
+      volumeSlider.addEventListener("input", function () {
+        sounds[key].volume = volumeSlider.value / 100;
+      });
+  
+      keyDiv.appendChild(volumeSlider);
+      rowDiv.appendChild(keyDiv);
+  
+      // Add click and touch event listeners
+      keyDiv.addEventListener("mousedown", () => handleInteraction(key));
+      keyDiv.addEventListener("mouseup", () => releaseInteraction(key));
+      keyDiv.addEventListener("touchstart", (e) => {
+        e.preventDefault(); // Prevent default touch behavior
+        handleInteraction(key);
+      });
+      keyDiv.addEventListener("touchend", () => releaseInteraction(key));
+  
+      // Add touchmove event listener for volume control
+      keyDiv.addEventListener("touchmove", function (event) {
+        const touch = event.touches[0];
+        const volume = touch.clientY / window.innerHeight;
+        sounds[key].volume = Math.min(Math.max(volume, 0), 1); // Ensure volume is between 0 and 1
+        volumeSlider.value = sounds[key].volume * 100;
+      });
     });
-
+  
     keyboardDiv.appendChild(rowDiv);
-});
-
-// Function to play sound (supports multiple channels)
-function playSound(key) {
+  });
+  
+  // Function to play sound (supports multiple channels)
+  function playSound(key) {
     const sound = sounds[key];
     if (sound) {
-        const audio = sound.cloneNode(); // Create a new audio instance each time
-        audio.volume = sound.volume; // Set volume to the same as the original sound
-        audio.play();
-
-        // If the key is open hi-hat (T or Y), store the reference to it
-        if (key === "T" || key === "Y") {
-            openHiHatAudio = audio; // Set the open hi-hat audio to the current sound
-        }
-
-        // Add to playing sounds array, with a limit of 64 channels
-        if (playingSounds.length >= 64) {
-            playingSounds.shift().stop(); // Remove the oldest sound
-        }
-
-        playingSounds.push(audio);
-
-        // Control sound duration based on the press duration
-        audio.addEventListener("ended", () => {
-            // Remove sound from playing list when finished
-            const index = playingSounds.indexOf(audio);
-            if (index > -1) playingSounds.splice(index, 1);
-        });
+      const audio = sound.cloneNode(); // Create a new audio instance each time
+      audio.volume = sound.volume; // Set volume to the same as the original sound
+      audio.play();
+  
+      // If the key is open hi-hat (T or Y), store the reference to it
+      if (key === "T" || key === "Y") {
+        openHiHatAudio = audio; // Set the open hi-hat audio to the current sound
+      }
+  
+      // Add to playing sounds array, with a limit of 64 channels
+      if (playingSounds.length >= 64) {
+        playingSounds.shift().stop(); // Remove the oldest sound
+      }
+  
+      playingSounds.push(audio);
+  
+      // Control sound duration based on the press duration
+      audio.addEventListener("ended", () => {
+        // Remove sound from playing list when finished
+        const index = playingSounds.indexOf(audio);
+        if (index > -1) playingSounds.splice(index, 1);
+      });
     }
-}
-
-// Function to stop the sound immediately
-function stopSound(key) {
+  }
+  
+  // Function to stop the sound immediately
+  function stopSound(key) {
     const sound = sounds[key];
     if (sound) {
-        sound.pause();
-        sound.currentTime = 0; // Reset the sound
+      sound.pause();
+      sound.currentTime = 0; // Reset the sound
     }
-}
-
-// Function to handle interaction (click or touch)
-function handleInteraction(key) {
+  }
+  
+  // Function to handle interaction (click or touch)
+  function handleInteraction(key) {
     if (keyboardLayout.join("").includes(key) && !activeKeys.has(key)) {
-        activeKeys.add(key);
-
-        // If closed hi-hat (R or U) is pressed, check if open hi-hat is playing
-        if ((key === "R" || key === "U") && openHiHatAudio) {
-            openHiHatAudio.pause(); // Stop the open hi-hat sound immediately
-            openHiHatAudio.currentTime = 0; // Reset its time
-            openHiHatAudio = null; // Reset the reference
-        }
-
-        playSound(key); // Play the sound when the key is pressed
-        highlightKey(key);
+      activeKeys.add(key);
+  
+      // If closed hi-hat (R or U) is pressed, check if open hi-hat is playing
+      if ((key === "R" || key === "U") && openHiHatAudio) {
+        openHiHatAudio.pause(); // Stop the open hi-hat sound immediately
+        openHiHatAudio.currentTime = 0; // Reset its time
+        openHiHatAudio = null; // Reset the reference
+      }
+  
+      playSound(key); // Play the sound when the key is pressed
+      highlightKey(key);
     }
-}
-
-// Function to release interaction (click or touch)
-function releaseInteraction(key) {
+  }
+  
+  // Function to release interaction (click or touch)
+  function releaseInteraction(key) {
     if (activeKeys.has(key)) {
-        activeKeys.delete(key);
-        stopSound(key); // Stop the sound when the key is released
+      activeKeys.delete(key);
+      stopSound(key); // Stop the sound when the key is released
     }
-}
-
-// Add event listener for keydown to play sounds
-document.addEventListener("keydown", (event) => {
+  }
+  
+  // Add event listener for keydown to play sounds
+  document.addEventListener("keydown", (event) => {
     const key = event.key.toUpperCase();
     handleInteraction(key);
-});
-
-// Add event listener for keyup to release keys and stop sound
-document.addEventListener("keyup", (event) => {
+  });
+  
+  // Add event listener for keyup to release keys and stop sound
+  document.addEventListener("keyup", (event) => {
     const key = event.key.toUpperCase();
     releaseInteraction(key);
-});
-
-// Highlight the pressed key visually
-function highlightKey(key) {
+  });
+  
+  // Highlight the pressed key visually
+  function highlightKey(key) {
     const keyDiv = document.querySelector(`.key[data-key="${key}"]`);
     if (keyDiv) {
-        keyDiv.classList.add("active");
-        setTimeout(() => keyDiv.classList.remove("active"), 100); // Minimize highlight delay to 100ms
+      keyDiv.classList.add("active");
+      setTimeout(() => keyDiv.classList.remove("active"), 100); // Minimize highlight delay to 100ms
     }
-}
-
-// Handle drum kit selection change
-document.getElementById("drumKit").addEventListener("change", (event) => {
+  }
+  
+  // Handle drum kit selection change
+  document.getElementById("drumKit").addEventListener("change", (event) => {
     currentDrumKit = event.target.value; // Update the current drum kit
     preloadSounds(); // Reload sounds for the new drum kit
     console.log(`Drum kit changed to: ${currentDrumKit}`);
-});
-
-// Preload sounds when the page loads
-window.addEventListener("load", preloadSounds);
-
-// Volume and Mixing Button and Controls
-document.addEventListener('DOMContentLoaded', function () {
-    const volumeMixingBtn = document.getElementById('volumeMixingBtn');
-    const volumeControls = document.getElementById('volumeControls');
+  });
+  
+  // Preload sounds when the page loads
+  window.addEventListener("load", preloadSounds);
+  
+  // Volume and Mixing Button and Controls
+  document.addEventListener("DOMContentLoaded", function () {
+    const volumeMixingBtn = document.getElementById("volumeMixingBtn");
+    const volumeControls = document.getElementById("volumeControls");
     const keys = Object.keys(keySoundMap);
-
-    volumeMixingBtn.addEventListener('click', function () {
-        const keyElements = document.querySelectorAll('.key');
-        keyElements.forEach(keyElement => {
-            keyElement.classList.toggle('show-volume');
-        });
-
-        if (volumeControls.classList.contains('hidden')) {
-            volumeControls.classList.remove('hidden');
-        } else {
-            volumeControls.classList.add('hidden');
-        }
+  
+    volumeMixingBtn.addEventListener("click", function () {
+      const keyElements = document.querySelectorAll(".key");
+      keyElements.forEach((keyElement) => {
+        keyElement.classList.toggle("show-volume");
+      });
+  
+      if (volumeControls.classList.contains("hidden")) {
+        volumeControls.classList.remove("hidden");
+      } else {
+        volumeControls.classList.add("hidden");
+      }
     });
-
-    document.getElementById('overallVolume').addEventListener('input', function () {
-        const overallVolume = this.value / 100;
-        keys.forEach(key => {
-            sounds[key].volume = overallVolume;
-        });
+  
+    document.getElementById("overallVolume").addEventListener("input", function () {
+      const overallVolume = this.value / 100;
+      keys.forEach((key) => {
+        sounds[key].volume = overallVolume;
+      });
     });
-
+  
     // Ensure custom buttons with 'no-keyboard-trigger' class are not focused when space bar is pressed
-    document.querySelectorAll('.no-keyboard-trigger').forEach(button => {
-        button.addEventListener('keydown', function (event) {
-            if (event.key === ' ') {
-                event.preventDefault();
-            }
-        });
+    document.querySelectorAll(".no-keyboard-trigger").forEach((button) => {
+      button.addEventListener("keydown", function (event) {
+        if (event.key === " ") {
+          event.preventDefault();
+        }
+      });
     });
-});
+  
+    // Load Sound Button functionality
+    const loadSoundBtn = document.getElementById("loadSoundBtn");
+    loadSoundBtn.addEventListener("click", function () {
+      const soundFileInput = document.createElement("input");
+      soundFileInput.type = "file";
+      soundFileInput.accept = "audio/*";
+  
+      soundFileInput.addEventListener("change", function (event) {
+        const file = event.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            const audio = new Audio(e.target.result);
+            audio.preload = "auto";
+            audio.volume = 0.6;
+            sounds[" "] = audio; // Assign to the space bar for now
+            console.log("Sound loaded and assigned to the space bar");
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+  
+      soundFileInput.click();
+    });
+  });
+  
+  document.addEventListener("DOMContentLoaded", () => {
+    let selectedFile = null;
+  
+    // Function to handle file input change
+    document.getElementById("chooseSampleBtn").addEventListener("click", () => {
+      document.getElementById("chooseSample").click();
+    });
+  
+    document.getElementById("chooseSample").addEventListener("change", (event) => {
+      selectedFile = event.target.files[0];
+      if (selectedFile) {
+        const message = document.getElementById("instructionMessage");
+        message.classList.remove("hidden");
+      }
+    });
+  
+    // Function to assign new sound to key temporarily
+    const assignSoundToKey = (key) => {
+      if (selectedFile) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const audio = new Audio(e.target.result);
+          sounds[key] = audio; // Overwrite the existing sound temporarily
+          selectedFile = null; // Reset the selected file
+          document.getElementById("instructionMessage").classList.add("hidden");
+        };
+        reader.readAsDataURL(selectedFile);
+      }
+    };
+  
+    // Function to handle key press or click
+    const handleKeyPress = (event) => {
+      const key = event.key ? event.key.toUpperCase() : event.target.getAttribute("data-key");
+      if (selectedFile) {
+        assignSoundToKey(key);
+      } else {
+        handleInteraction(key);
+      }
+    };
+  
+    // Add event listeners for key press and click
+    document.addEventListener("keydown", handleKeyPress);
+    document.querySelectorAll(".key").forEach((keyDiv) => {
+      keyDiv.addEventListener("click", handleKeyPress);
+    });
+  });
